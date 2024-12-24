@@ -60,11 +60,16 @@ def market_data():
     auth_reponse=authenticate()
     if auth_reponse:
         return auth_reponse
+    
     vs_currency=request.form.get('vs_currency','cad')
     days=request.form.get('days',10,type=int)
-    id=request.form.get('coin_id')
-    market_data=requests.get(url=f'{BASE_URL}/coins/{id}/market_chart',params={'vs_currency':vs_currency,'days':days})
-    return jsonify(market_data.json()),200
+    coin_id=request.form.get('coin_id')
+
+    if coin_id:
+        market_data=requests.get(url=f'{BASE_URL}/coins/{coin_id}/market_chart',params={'vs_currency':vs_currency,'days':days})
+        return jsonify(market_data.json()),200
+    else:
+        return jsonify(message='Please provide coin id'), 400
 
 if __name__=='__main__':
     app.run(debug=True)
