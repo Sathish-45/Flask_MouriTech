@@ -1,0 +1,104 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Crypto API"
+  description: "API for fetching cryptocurrency market updates"
+host: "localhost:5000"
+basePath: "/"
+schemes:
+  - "http"
+paths:
+  /coins:
+    get:
+      summary: "List all coins"
+      description: "Fetches a paginated list of all coins with their market data in CAD."
+      parameters:
+        - name: "page_num"
+          in: "formData"
+          description: "Page number for pagination"
+          required: false
+          type: "integer"
+          default: 1
+        - name: "per_page"
+          in: "formData"
+          description: "Number of items per page"
+          required: false
+          type: "integer"
+          default: 10
+      responses:
+        200:
+          description: "A list of coins"
+          schema:
+            type: "array"
+            items:
+              type: "object"
+        401:
+          description: "Unauthorized"
+  /categories:
+    get:
+      summary: "List coin categories"
+      description: "Fetches a list of all coin categories."
+      responses:
+        200:
+          description: "A list of categories"
+          schema:
+            type: "array"
+            items:
+              type: "object"
+        401:
+          description: "Unauthorized"
+  /coin/{coin_id}:
+    get:
+      summary: "Get coin details by ID"
+      description: "Fetches details of a specific coin by its ID."
+      parameters:
+        - name: "coin_id"
+          in: "path"
+          description: "The ID of the coin to fetch details for"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Coin details"
+          schema:
+            type: "object"
+        401:
+          description: "Unauthorized"       
+  
+  /coin/market:
+    post:
+      summary: "Fetch coin market data"
+      description: "Fetches market data for a specific coin by its ID using form data."
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+        - name: "coin_id"
+          in: "formData"
+          description: "The ID of the coin to fetch details for"
+          required: true
+          type: "string"
+        - name: "vs_currency"
+          in: "formData"
+          description: "Currency to compare the coin against (e.g., CAD, USD)"
+          required: false
+          type: "string"
+          default: "cad"
+        - name: "days"
+          in: "formData"
+          description: "Number of days for historical data (e.g., 1, 7, 30)"
+          required: false
+          type: "integer"
+          default: 10
+      responses:
+        200:
+          description: "Market data for the specified coin"
+        401:
+          description: "Unauthorized" 
+
+  securityDefinitions:
+  apiKey:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+security:
+  - apiKey: []
