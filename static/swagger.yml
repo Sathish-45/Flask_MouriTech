@@ -7,11 +7,18 @@ host: "localhost:5000"
 basePath: "/"
 schemes:
   - "http"
+securityDefinitions:
+  apiKey:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+security:
+  - apiKey: []
 paths:
   /coins:
-    get:
+    post:
       summary: "List all coins"
-      description: "Fetches a paginated list of all coins with their market data in CAD."
+      description: "Fetches a paginated list of all coins with their market data."
       parameters:
         - name: "page_num"
           in: "formData"
@@ -94,11 +101,3 @@ paths:
           description: "Market data for the specified coin"
         401:
           description: "Unauthorized" 
-
-  securityDefinitions:
-  apiKey:
-    type: "apiKey"
-    name: "Authorization"
-    in: "header"
-security:
-  - apiKey: []
